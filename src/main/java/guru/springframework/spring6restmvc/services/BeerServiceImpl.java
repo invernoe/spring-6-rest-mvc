@@ -89,7 +89,7 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public void updateBeerById(UUID id, BeerDTO beer) {
+    public Optional<BeerDTO> updateBeerById(UUID id, BeerDTO beer) {
         BeerDTO existing = beerMap.get(id);
 
         existing.setBeerName(beer.getBeerName());
@@ -101,15 +101,18 @@ public class BeerServiceImpl implements BeerService {
         existing.setUpdateDate(LocalDateTime.now());
 
         beerMap.put(existing.getId(), existing);
+
+        return Optional.of(existing);
     }
 
     @Override
-    public void deleteById(UUID id) {
+    public Boolean deleteById(UUID id) {
         beerMap.remove(id);
+        return true;
     }
 
     @Override
-    public void patchBeerById(UUID id, BeerDTO beer) {
+    public Optional<BeerDTO> patchBeerById(UUID id, BeerDTO beer) {
         BeerDTO existing = beerMap.get(id);
 
         if(StringUtils.hasText(beer.getBeerName()))
@@ -127,5 +130,6 @@ public class BeerServiceImpl implements BeerService {
         existing.setUpdateDate(LocalDateTime.now());
 
         beerMap.put(existing.getId(), existing);
+        return Optional.of(existing);
     }
 }

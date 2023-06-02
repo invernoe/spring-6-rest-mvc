@@ -23,21 +23,23 @@ public class BeerController {
 
     @PatchMapping(BEER_PATH_ID)
     public ResponseEntity patchById(@PathVariable("beerId") UUID id, @RequestBody BeerDTO beer){
-        beerService.patchBeerById(id, beer);
+        beerService.patchBeerById(id, beer).orElseThrow(NotFoundException::new);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(BEER_PATH_ID)
     public ResponseEntity deleteById(@PathVariable("beerId") UUID id){
-        beerService.deleteById(id);
+        if(!beerService.deleteById(id)){
+            throw new NotFoundException();
+        }
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping(BEER_PATH_ID)
     public ResponseEntity updateById(@PathVariable("beerId") UUID id, @RequestBody BeerDTO beer){
-        beerService.updateBeerById(id, beer);
+        beerService.updateBeerById(id, beer).orElseThrow(NotFoundException::new);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
@@ -47,7 +49,7 @@ public class BeerController {
         BeerDTO beerSaved = beerService.saveNewBeer(beer);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "/api/v1/beer/" + beerSaved.getId());
+        headers.add("Location", BEER_PATH + "/" + beerSaved.getId());
 
         return new ResponseEntity(headers, HttpStatus.CREATED);
     }
