@@ -57,9 +57,12 @@ public class BeerController {
     }
 
     @GetMapping(BEER_PATH)
-    public List<BeerDTO> listBeers(@RequestParam(required = false) String beerName, @RequestParam(required = false) BeerStyle beerStyle
-            , @RequestParam(required = false) Boolean showInventory){
-        return beerService.listBeers(beerName, beerStyle, showInventory);
+    public List<BeerDTO> listBeers(@RequestParam(required = false) String beerName
+            , @RequestParam(required = false) BeerStyle beerStyle
+            , @RequestParam(required = false, defaultValue = "false") Boolean showInventory
+            , @RequestParam(required = false, defaultValue = "1") Integer pageNumber
+            , @RequestParam(required = false, defaultValue = "25") Integer pageSize){
+        return beerService.listBeers(beerName, beerStyle, showInventory, pageNumber, pageSize);
     }
 
     @GetMapping(value = BEER_PATH_ID)
