@@ -56,7 +56,7 @@ class BeerControllerTest {
 
     @Test
     void testPatchBeer() throws Exception {
-        BeerDTO testBeer = beerServiceImpl.listBeers(null).get(0);
+        BeerDTO testBeer = beerServiceImpl.listBeers(null, null).get(0);
 
         Map<String, Object> beerMap = new HashMap<>();
         beerMap.put("beerName", "New Name");
@@ -76,7 +76,7 @@ class BeerControllerTest {
 
     @Test
     void testDeleteBeer() throws Exception {
-        BeerDTO testBeer = beerServiceImpl.listBeers(null).get(0);
+        BeerDTO testBeer = beerServiceImpl.listBeers(null, null).get(0);
         given(beerService.deleteById(any())).willReturn(true);
 
         mockMvc.perform(MockMvcRequestBuilders.delete(BeerController.BEER_PATH_ID, testBeer.getId())
@@ -90,7 +90,7 @@ class BeerControllerTest {
     @Test
     void testUpdateBeerBlankName() throws Exception {
         // get the BeerDto with index 0, so that we can use its id in the put method
-        BeerDTO testBeer = beerServiceImpl.listBeers(null).get(0);
+        BeerDTO testBeer = beerServiceImpl.listBeers(null, null).get(0);
         // set beer name as blank and not null to trigger only 1 validation error
         testBeer.setBeerName("");
         // perform the post and expect it to return bad request
@@ -106,7 +106,7 @@ class BeerControllerTest {
 
     @Test
     void testUpdateBeer() throws Exception {
-        BeerDTO testBeer = beerServiceImpl.listBeers(null).get(0);
+        BeerDTO testBeer = beerServiceImpl.listBeers(null, null).get(0);
         given(beerService.updateBeerById(any(), any())).willReturn(Optional.of(testBeer));
 
         mockMvc.perform(MockMvcRequestBuilders.put(BeerController.BEER_PATH_ID, testBeer.getId())
@@ -134,11 +134,11 @@ class BeerControllerTest {
 
     @Test
     void testCreateNewBeer() throws Exception {
-        BeerDTO testBeer = beerServiceImpl.listBeers(null).get(0);
+        BeerDTO testBeer = beerServiceImpl.listBeers(null, null).get(0);
         testBeer.setId(null);
         testBeer.setVersion(null);
         // mockito will return BeerDto with index 1 whenever the service mock function is called
-        given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.listBeers(null).get(1));
+        given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.listBeers(null, null).get(1));
 
         mockMvc.perform(MockMvcRequestBuilders.post(BeerController.BEER_PATH)
                         .accept(MediaType.APPLICATION_JSON)
@@ -150,7 +150,7 @@ class BeerControllerTest {
 
     @Test
     void testListBeers() throws Exception {
-        given(beerService.listBeers(null)).willReturn(beerServiceImpl.listBeers(null));
+        given(beerService.listBeers(null, null)).willReturn(beerServiceImpl.listBeers(null, null));
 
         mockMvc.perform(MockMvcRequestBuilders.get(BeerController.BEER_PATH)
                         .accept(MediaType.APPLICATION_JSON))
@@ -170,7 +170,7 @@ class BeerControllerTest {
 
     @Test
     void getBeerById() throws Exception {
-        BeerDTO testBeer = beerServiceImpl.listBeers(null).get(0);
+        BeerDTO testBeer = beerServiceImpl.listBeers(null, null).get(0);
 
         given(beerService.getBeerById(testBeer.getId())).willReturn(Optional.of(testBeer));
 
